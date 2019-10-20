@@ -1,3 +1,4 @@
+#include <bitset>
 #include <cassert>
 #include <iostream>
 
@@ -110,15 +111,91 @@ void test_invert_check_turn_on_off_bit() {
   assert(check_bit(b, FOUR) == 0);
 };
 
+// The expression (n & (n – 1)) will turn off the rightmost set bit of given
+// number.
+
+/*
+00010100   &                 (n = 20)
+00010011                     (n-1 = 19)
+~~~~~~~~
+00010000
+*/
+
+// Check if given positive integer is a power of 2 without using any branching
+// or loop.
+
+bool is_power_of_2(unsigned n) {
+  std::cout << n << " in binary is " << std::bitset<8>(n) << "\n";
+  std::cout << n - 1 << " in binary is " << std::bitset<8>(n - 1) << "\n\n";
+
+  return !(n & (n - 1));
+}
+
+void test_if_n_is_a_power_of_2() {
+  unsigned n = 16;
+
+  if (is_power_of_2(n))
+    std::cout << n << " is power of two";
+  else
+    std::cout << n << " is not a power of two";
+};
+
+// Find position of the rightmost set bit
+/*
+ * The idea is to unset the rightmost bit of number n and XOR the result with n.
+ * Then the position of the rightmost set bit in n will be the position of the
+ * only set bit in the result. Note that if n is odd, we can directly return 1
+ * as first bit is always set for odd numbers.
+ */
+
+int rightmost_set_bit_position(uint n) {
+  // if number is odd, return 1
+  if (n & 1) return 1;
+
+  // unset rightmost bit and xor with number itself
+  n = n ^ (n & (n - 1));
+
+  // find the position of the only set bit in the result
+  // we can directly return log2(n) + 1 from the function
+  int pos = 0;
+  while (n) {
+    n = n >> 1;
+    pos++;
+  }
+  return pos;
+}
+
+void test_find_rightmost_set_bit_position() {
+  uint n = 20;
+
+  std::cout << n << " in binary is " << std::bitset<8>(n) << std::endl;
+  std::cout << "Position of the rightmost set bit is "
+            << rightmost_set_bit_position(n);
+};
+
+using test = void (*)(void);
+
 int main() {
   using namespace std;
 
-  test_is_odd_binaryhack();
-  test_has_same_sign();  // TODO: use bitset for showing bit representation of
-                         // int
-  test_binary_increment();
-  test_binary_swap();
-  test_invert_check_turn_on_off_bit();
+  test tests[]{
+      test_is_odd_binaryhack,
+      test_has_same_sign,  // TODO: use bitset for showing bit representation of
+                           // int
+      test_binary_increment,
+      test_binary_swap,
+      test_invert_check_turn_on_off_bit,
+
+      test_if_n_is_a_power_of_2,
+      test_find_rightmost_set_bit_position,
+  };
+  uint counter{0};
+  for (test t : tests) {
+    cout << endl;
+    cout << "=> Running test " << counter++;
+    cout << endl;
+    t();
+  }
 
   cout << endl;
   cout << "==> All asserts were passed! <==" << endl;
