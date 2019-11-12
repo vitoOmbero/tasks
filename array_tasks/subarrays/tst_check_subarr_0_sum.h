@@ -6,8 +6,10 @@
 #include <gmock/gmock-matchers.h>
 #include <gtest/gtest.h>
 
+#include "consecutive_integers.h"
 #include "getzerosumsubarrays_naive.h"
 #include "getzerosumsubarrays_opt.h"
+#include "subarray.h"
 #include "zerosumsubarray.h"
 
 using namespace testing;
@@ -36,7 +38,7 @@ TEST(all_subarr_0_sum_degenerate, SubarrayTests) {
   int n = sizeof(input) / sizeof(input[0]);
 
   std::list<Subarray> output =
-      getZeroSumSubarrays_NAIVE(input, n); // time O(n^2), space O(n)
+      *(getZeroSumSubarrays_NAIVE(input, n)); // time O(n^2), space O(n)
 
   // int first[]{-3, -1, 0, 4};
   Subarray first{&input[2], &input[5]};
@@ -56,7 +58,7 @@ TEST(all_subarr_0_sum_degenerate, SubarrayTests) {
   ASSERT_EQ(got_first.end, first.end);
 
   // opt
-  output = getZeroSumSubarrays_OPT(input, n); // time O(n) amortized
+  output = *(getZeroSumSubarrays_OPT(input, n)); // time O(n) amortized
 
   got_first = output.back();
 
@@ -75,7 +77,7 @@ TEST(all_subarr_0_sum_average, SubarrayTests) {
   int n = sizeof(input) / sizeof(input[0]);
 
   std::list<Subarray> output =
-      getZeroSumSubarrays_NAIVE(input, n); // time O(n^2)
+      *(getZeroSumSubarrays_NAIVE(input, n)); // time O(n^2)
 
   //  { 3, 1, -4 }
   Subarray sub1{&input[5], &input[7]};
@@ -127,7 +129,7 @@ TEST(all_subarr_0_sum_average, SubarrayTests) {
 
   // opt
 
-  output = getZeroSumSubarrays_OPT(input, n); // time O(n) amortized
+  output = *(getZeroSumSubarrays_OPT(input, n)); // time O(n) amortized
 
   got = output.back();
 
@@ -163,6 +165,20 @@ TEST(all_subarr_0_sum_average, SubarrayTests) {
 
   ASSERT_THAT(got.start, Eq(sub6.start));
   ASSERT_EQ(got.end, sub6.end);
+}
+
+TEST(largest_subarr_consecutive_integers, SubarrayTests) {
+  //    Find largest sub-array formed by consecutive integers
+  //    Given an array of integers, find largest sub-array formed by consecutive
+  //    integers. The sub-array should contain all distinct values.
+
+  int input[] = {2, 0, 2, 1, 4, 3, 1, 0};
+  int n = sizeof(input) / sizeof(input[0]);
+
+  Subarray subarr = find_max_subarr_consecutive_integers(input, n);
+  Subarray expected{&input[1], &input[5]};
+
+  ASSERT_EQ(expected, subarr);
 }
 
 #endif // TST_CHECK_SUBARR_0_SUM_H
