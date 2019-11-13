@@ -2,6 +2,7 @@
 #define TST_CHECK_SUBARR_0_SUM_H
 
 #include <list>
+#include <vector>
 
 #include <gmock/gmock-matchers.h>
 #include <gtest/gtest.h>
@@ -9,6 +10,7 @@
 #include "consecutive_integers.h"
 #include "getzerosumsubarrays_naive.h"
 #include "getzerosumsubarrays_opt.h"
+#include "reverse_consecutive_subarray.h"
 #include "subarray.h"
 #include "zerosumsubarray.h"
 
@@ -179,6 +181,32 @@ TEST(largest_subarr_consecutive_integers, SubarrayTests) {
   Subarray expected{&input[1], &input[5]};
 
   ASSERT_EQ(expected, subarr);
+}
+
+TEST(reverse_consecutive_elements, SubarrayTests) {
+  // Reverse every consecutive m elements of the given subarray
+
+  int array[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+  int subgroup_length = 3;
+
+  int result0[]{1, /**/ 4, 3, 2, /**/ /**/ 7, 6, 5, /**/ 8, 9, 10};
+  std::vector<int> got = reverse_each_subgroup(array, 1, 7, subgroup_length);
+  ASSERT_THAT(got,
+              ElementsAre(1, /**/ 4, 3, 2, /**/ /**/ 7, 6, 5, /**/ 8, 9, 10));
+  //  ASSERT_EQ(reverse_each_subgroup(array, 1, 7, subgroup_length), result0);
+  //  ASSERT_EQ(reverse_each_subgroup(array, 1, 8, subgroup_length), result0);
+
+  //  Subarray sa10{&array[1], &array[9]};
+  //  int result10[]{1, /**/ 4, 3, 2, /**/ /**/ 7, 6, 5, /**/ /**/ 10, 9, 8
+  //  /**/}; ASSERT_EQ(reverse_each_subgroup(array, 1, 9, subgroup_length),
+  //  result10);
+
+  //  Subarray sa20{&array[3], &array[5]};
+  //  int result20[]{1, 2, 3, /**/ 6, 5, 4, /**/ 7, 8, 9, 10};
+  //  ASSERT_EQ(reverse_each_subgroup(array, 3, 5, subgroup_length), result20);
+  //  Subarray sa30{&array[3], &array[4]};
+  //  int result30[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+  //  ASSERT_EQ(reverse_each_subgroup(array, 3, 4, subgroup_length), result30);
 }
 
 #endif // TST_CHECK_SUBARR_0_SUM_H
