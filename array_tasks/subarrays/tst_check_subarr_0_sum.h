@@ -1,8 +1,8 @@
 #ifndef TST_CHECK_SUBARR_0_SUM_H
 #define TST_CHECK_SUBARR_0_SUM_H
 
+#include <array>
 #include <list>
-#include <vector>
 
 #include <gmock/gmock-matchers.h>
 #include <gtest/gtest.h>
@@ -186,11 +186,12 @@ TEST(largest_subarr_consecutive_integers, SubarrayTests) {
 TEST(reverse_consecutive_elements, SubarrayTests) {
   // Reverse every consecutive m elements of the given subarray
 
-  int array[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+  std::uint64_t const N = 10;
+  std::array<int, N> array{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
   int subgroup_length = 3;
 
   int result0[]{1, /**/ 4, 3, 2, /**/ /**/ 7, 6, 5, /**/ 8, 9, 10};
-  std::vector<int> got = reverse_each_subgroup(array, 1, 7, subgroup_length);
+  std::array<int, N> got = reverse_each_subgroup(array, 1, 7, subgroup_length);
   ASSERT_THAT(got,
               ElementsAre(1, /**/ 4, 3, 2, /**/ /**/ 7, 6, 5, /**/ 8, 9, 10));
   //  ASSERT_EQ(reverse_each_subgroup(array, 1, 7, subgroup_length), result0);
