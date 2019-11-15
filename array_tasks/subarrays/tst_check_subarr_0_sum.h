@@ -8,6 +8,7 @@
 #include <gtest/gtest.h>
 
 #include "consecutive_integers.h"
+#include "findsubarrays.h"
 #include "getzerosumsubarrays_naive.h"
 #include "getzerosumsubarrays_opt.h"
 #include "reverse_consecutive_subarray.h"
@@ -186,28 +187,50 @@ TEST(largest_subarr_consecutive_integers, SubarrayTests) {
 TEST(reverse_consecutive_elements, SubarrayTests) {
   // Reverse every consecutive m elements of the given subarray
 
-  std::uint64_t const N = 10;
+  std::size_t const N = 10;
   std::array<int, N> array{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
   int subgroup_length = 3;
 
-  int result0[]{1, /**/ 4, 3, 2, /**/ /**/ 7, 6, 5, /**/ 8, 9, 10};
+  std::array<int, N> result0{1, /**/ 4, 3, 2, /**/ /**/ 7, 6, 5, /**/ 8, 9, 10};
   std::array<int, N> got = reverse_each_subgroup(array, 1, 7, subgroup_length);
   ASSERT_THAT(got,
               ElementsAre(1, /**/ 4, 3, 2, /**/ /**/ 7, 6, 5, /**/ 8, 9, 10));
-  //  ASSERT_EQ(reverse_each_subgroup(array, 1, 7, subgroup_length), result0);
-  //  ASSERT_EQ(reverse_each_subgroup(array, 1, 8, subgroup_length), result0);
+  ASSERT_EQ(reverse_each_subgroup(array, 1, 7, subgroup_length), result0);
+  ASSERT_EQ(reverse_each_subgroup(array, 1, 8, subgroup_length), result0);
 
   //  Subarray sa10{&array[1], &array[9]};
-  //  int result10[]{1, /**/ 4, 3, 2, /**/ /**/ 7, 6, 5, /**/ /**/ 10, 9, 8
-  //  /**/}; ASSERT_EQ(reverse_each_subgroup(array, 1, 9, subgroup_length),
-  //  result10);
-
+  std::array<int, N> result10{1, /**/ 4,       3, 2, /**/ /**/ 7, 6,
+                              5, /**/ /**/ 10, 9, 8 /**/};
+  ASSERT_EQ(reverse_each_subgroup(array, 1, 9, subgroup_length), result10);
   //  Subarray sa20{&array[3], &array[5]};
-  //  int result20[]{1, 2, 3, /**/ 6, 5, 4, /**/ 7, 8, 9, 10};
-  //  ASSERT_EQ(reverse_each_subgroup(array, 3, 5, subgroup_length), result20);
+  std::array<int, N> result20{1, 2, 3, /**/ 6, 5, 4, /**/ 7, 8, 9, 10};
+  ASSERT_EQ(reverse_each_subgroup(array, 3, 5, subgroup_length), result20);
   //  Subarray sa30{&array[3], &array[4]};
-  //  int result30[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-  //  ASSERT_EQ(reverse_each_subgroup(array, 3, 4, subgroup_length), result30);
+  std::array<int, N> result30{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+  ASSERT_EQ(reverse_each_subgroup(array, 3, 4, subgroup_length), result30);
 }
 
+TEST(find_subarrays_with_given_sum_in_an_array, SubarrayTests) {
+  std::size_t const N = 8;
+  std::array<int, N> array{3, 4, -7, 1, 3, 3, 1, -4};
+  int sum = 7;
+  //    { 3, 4 }
+  Subarray sub0{&array[0], &array[1]};
+  //    { 3, 4, -7, 1, 3, 3 }
+  Subarray sub1{&array[0], &array[5]};
+  //    { 1, 3, 3 }
+  Subarray sub2{&array[3], &array[5]};
+  //    { 3, 3, 1 }
+  Subarray sub3{&array[4], &array[6]};
+
+  std::vector<Subarray> *result = find_subarrays_NAIVE<int, N>(array, sum);
+  ASSERT_THAT(sub0.start, Eq((*result)[0].start));
+  ASSERT_THAT(sub0.end, Eq((*result)[0].end));
+  ASSERT_THAT(sub1.start, Eq((*result)[1].start));
+  ASSERT_THAT(sub1.end, Eq((*result)[1].end));
+  ASSERT_THAT(sub2.start, Eq((*result)[2].start));
+  ASSERT_THAT(sub2.end, Eq((*result)[2].end));
+  ASSERT_THAT(sub3.start, Eq((*result)[3].start));
+  ASSERT_THAT(sub3.end, Eq((*result)[3].end));
+}
 #endif // TST_CHECK_SUBARR_0_SUM_H

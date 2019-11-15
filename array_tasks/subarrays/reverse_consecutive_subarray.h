@@ -4,14 +4,14 @@
 
 #include "subarray.h"
 
-template <std::uint64_t const N>
+template <std::size_t const N>
 void swap(std::array<int, N> &array, int i, int j) {
   int temp = array[i];
   array[i] = array[j];
   array[j] = temp;
 }
 
-template <std::uint64_t const N>
+template <std::size_t const N>
 void reverse_subarray(std::array<int, N> &array, int i, int j) {
   while (i < j) {
     swap(array, i, j);
@@ -19,7 +19,7 @@ void reverse_subarray(std::array<int, N> &array, int i, int j) {
   }
 }
 
-template <std::uint64_t const N>
+template <std::size_t const N>
 std::array<int, N> reverse_each_subgroup(std::array<int, N> array,
                                          int start_index, int end_index,
                                          int subgroup_length) {
